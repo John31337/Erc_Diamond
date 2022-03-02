@@ -1,1 +1,1 @@
-import "./deploy"
+import "./hardhat/deploy"

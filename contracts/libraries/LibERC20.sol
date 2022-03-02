@@ -14,7 +14,6 @@ library LibERC20 {
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
-
     function transfer(AppStorage storage s, address _from, address _to, uint256 _value) internal {
         require(_from != address(0), "_from cannot be zero address");
         require(_to != address(0), "_to cannot be zero address");        
@@ -33,5 +32,4 @@ library LibERC20 {
         s.allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
-    
 }
