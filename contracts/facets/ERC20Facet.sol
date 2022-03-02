@@ -9,7 +9,7 @@ contract ERC20Facet {
     AppStorage s;
     
     function name() external pure returns (string memory)  {
-        return unicode"Main Token";
+        return unicode"Erc Diamond Token";
     }
 
     function symbol() external pure returns (string memory) {

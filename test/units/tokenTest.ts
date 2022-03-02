@@ -28,13 +28,10 @@ export function likeToken(): void{
       assert.equal(addresses.length, 3)
     })
 
-    it('Deployment should assign the total supply of tokens to the owner', async function () {
+    it('Emoji Token Test', async function () {
       console.log("Token Name", await tokenFacet.name())
       console.log("Token Symbol", await tokenFacet.symbol())
       console.log("Token Total Supply", await tokenFacet.totalSupply())
-      // const owner = await ownershipFacet.owner()
-      // const ownerBalance = await tokenFacet.balanceOf(owner)
-      // assert.equal((await tokenFacet.totalSupply()).toString(), ownerBalance.toString())
     })
   })
 }
