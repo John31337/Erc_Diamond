@@ -9,7 +9,7 @@ contract ERC20Facet {
     AppStorage s;
     
     function name() external pure returns (string memory)  {
-        return unicode"Diamond Emoji Token";
+        return unicode"Main Token";
     }
 
     function symbol() external pure returns (string memory) {
