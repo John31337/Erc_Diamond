@@ -12,14 +12,17 @@ export function likeToken(): void{
     let diamondAddress: string;
     let diamondCutFacet: Contract;
     let diamondLoupeFacet:Contract;
+    let cfMainToken: Contract;
     let tokenFacet:Contract;
     let ercDiamondFacet:Contract;
+    let owner:SignerWithAddress;
     let addresses:string[] = [];
 
     let projectName:string = "ERC20Diamond";
     let price:number = 1000;
 
     before(async function () {
+      [owner] = await ethers.getSigners();
       diamondAddress = await deployDiamond(projectName, price)
       diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress)
       diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', diamondAddress)
@@ -41,7 +44,9 @@ export function likeToken(): void{
     })
 
     it("Main Token Test", async () => {
-        console.log(await ercDiamondFacet.projectToken())
+        const mainTokenAddr = await ercDiamondFacet.projectToken();
+        cfMainToken = await ethers.getContractAt('MainToken', mainTokenAddr);
+        console.log(cfMainToken);
     })
   })
 }
