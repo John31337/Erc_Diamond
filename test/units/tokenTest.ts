@@ -37,6 +37,10 @@ export function likeToken(): void{
       console.log("Token Symbol", await tokenFacet.symbol())
       console.log("Token Total Supply", await tokenFacet.totalSupply())
     })
+
+    it("Main Token Test", async () => {
+        
+    })
   })
 }
 

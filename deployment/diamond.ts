@@ -1,6 +1,6 @@
 import {HardhatEthersHelpers} from "@nomiclabs/hardhat-ethers/types";
 
-export async function deployDiamond (ethers: HardhatEthersHelpers) {
+export async function deployDiamond (ethers: HardhatEthersHelpers, projectName: string, price: number) {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
