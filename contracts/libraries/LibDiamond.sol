@@ -6,8 +6,12 @@ pragma solidity ^0.8.0;
 * EIP-2535 Diamonds: https://eips.ethereum.org/EIPS/eip-2535
 /******************************************************************************/
 import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
+import { MainToken } from "../MainToken.sol";
+import { Strings } from "./Strings.sol";
 
 library LibDiamond {
+    using Strings for string;
+    
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.standard.diamond.storage");
 
     struct FacetAddressAndPosition {
@@ -31,8 +35,14 @@ library LibDiamond {
         // Used to query if a contract implements an interface.
         // Used to implement ERC-165.
         mapping(bytes4 => bool) supportedInterfaces;
+        //Project Name
+        string _projectName;
         // owner of the contract
         address contractOwner;
+        // Erc20Token contract
+        address MainToken;
+        // Price of Token
+        uint256 Price;
     }
 
     function diamondStorage() internal pure returns (DiamondStorage storage ds) {
@@ -203,5 +213,17 @@ library LibDiamond {
             contractSize := extcodesize(_contract)
         }
         require(contractSize > 0, _errorMessage);
+    }
+
+    function setMainToken(string memory _prjName, uint256 _price) internal{
+        require(_prjName.length() > 2, "Erc Diamond: NAME_MIN_3");
+        require(_price > 0, "Erc Diamond: PRICE_NO_ZERO");
+        DiamondStorage storage ds = diamondStorage();  
+        
+        ds._projectName = _prjName;
+        ds.Price = _price;
+
+        string memory tokenSymbol = string("T").append(ds._projectName);
+        ds.MainToken = address(new MainToken(ds._projectName, tokenSymbol));
     }
 }
