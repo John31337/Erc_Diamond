@@ -24,6 +24,4 @@ contract DiamondInit {
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
         ds.supportedInterfaces[type(IERC20).interfaceId] = true;
     }
-
-
 }

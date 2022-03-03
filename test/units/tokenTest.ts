@@ -13,6 +13,7 @@ export function likeToken(): void{
     let diamondCutFacet: Contract;
     let diamondLoupeFacet:Contract;
     let tokenFacet:Contract;
+    let ercDiamondFacet:Contract;
     let addresses:string[] = [];
 
     let projectName:string = "ERC20Diamond";
@@ -23,13 +24,14 @@ export function likeToken(): void{
       diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress)
       diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', diamondAddress)
       tokenFacet = await ethers.getContractAt('ERC20Facet', diamondAddress)
+      ercDiamondFacet = await ethers.getContractAt('ErcDiamondFacet', diamondAddress)
     })
     
     it('should have three facets -- call to facetAddresses function', async () => {
       for (const address of await diamondLoupeFacet.facetAddresses()) {
         addresses.push(address)
       }
-      assert.equal(addresses.length, 3)
+      assert.equal(addresses.length, 4)
     })
 
     it('Emoji Token Test', async function () {
@@ -39,7 +41,7 @@ export function likeToken(): void{
     })
 
     it("Main Token Test", async () => {
-        
+        console.log(await ercDiamondFacet.projectToken())
     })
   })
 }

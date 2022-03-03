@@ -11,7 +11,6 @@ import { Strings } from "./Strings.sol";
 
 library LibDiamond {
     using Strings for string;
-    
     bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.standard.diamond.storage");
 
     struct FacetAddressAndPosition {

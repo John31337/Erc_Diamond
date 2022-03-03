@@ -33,6 +33,7 @@ export async function deployDiamond(projectName: string, price: number) {
     const FacetNames = [
         'DiamondLoupeFacet',
         'ERC20Facet',
+        'ErcDiamondFacet',
     ]
     const cut = []
     for (const FacetName of FacetNames) {
