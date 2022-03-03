@@ -24,7 +24,7 @@ export function likeDiamond(): void{
     let pausableFacet:Contract;
     let addresses:string[] = [];
 
-    let projectName:string = "ERC20Diamond";
+    let projectName:string = "Theia Coin";
     let price:number = 1000;
 
     before(async function () {

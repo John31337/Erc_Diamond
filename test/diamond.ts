@@ -2,6 +2,9 @@
 /* eslint prefer-const: "off" */
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import {ethers} from "hardhat";
+import {
+    AFTER_ONE_DAY_TIMESTAMP
+} from "./helper";
 
 const { getSelectors, FacetCutAction } = require('../deployment/libraries/diamond')
 
@@ -17,7 +20,7 @@ export async function deployDiamond(projectName: string, price: number, signer: 
   
     // deploy Diamond
     const Diamond = await ethers.getContractFactory('Diamond', signer)
-    const diamond = await Diamond.deploy(projectName, price, contractOwner.address, diamondCutFacet.address)
+    const diamond = await Diamond.deploy(projectName, price, AFTER_ONE_DAY_TIMESTAMP(), contractOwner.address, diamondCutFacet.address)
     await diamond.deployed()
     // console.log('Diamond deployed:', diamond.address)
   

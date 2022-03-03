@@ -38,7 +38,8 @@ library LibDiamond {
         string _projectName;
         // paused of the contract
         bool _paused;
-
+        // GMT timestamp of when the crowdfund starts
+        uint256 startTimestamp;
         // owner of the contract
         address contractOwner;
         // Erc20Token contract
@@ -227,13 +228,15 @@ library LibDiamond {
         require(contractSize > 0, _errorMessage);
     }
 
-    function setMainToken(string memory _prjName, uint256 _price) internal{
+    function setMainToken(string memory _prjName, uint256 _price, uint256 _stTimestamp) internal{
         require(_prjName.length() > 2, "Erc Diamond: NAME_MIN_3");
         require(_price > 0, "Erc Diamond: PRICE_NO_ZERO");
+        require(_stTimestamp > 0, "Erc Diamond: START>0");
         DiamondStorage storage ds = diamondStorage();  
         
         ds._projectName = _prjName;
         ds.Price = _price;
+        ds.startTimestamp = _stTimestamp;
 
         string memory tokenSymbol = string("T").append(ds._projectName);
         ds.MainToken = address(new MainToken(ds._projectName, tokenSymbol));
