@@ -36,6 +36,9 @@ library LibDiamond {
         mapping(bytes4 => bool) supportedInterfaces;
         //Project Name
         string _projectName;
+        // paused of the contract
+        bool _paused;
+
         // owner of the contract
         address contractOwner;
         // Erc20Token contract
@@ -66,6 +69,16 @@ library LibDiamond {
 
     function enforceIsContractOwner() internal view {
         require(msg.sender == diamondStorage().contractOwner, "LibDiamond: Must be contract owner");
+    }
+
+    // The contract must be paused.
+    function whenPaused() internal view {
+        require(diamondStorage()._paused, "Pausable: not paused");
+    }
+
+    // The contract must not be paused.
+    function whenNotPaused() internal view {
+        require(!diamondStorage()._paused, "Pausable: paused");
     }
 
     event DiamondCut(IDiamondCut.FacetCut[] _diamondCut, address _init, bytes _calldata);

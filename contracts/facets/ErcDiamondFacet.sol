@@ -5,7 +5,7 @@ import {LibDiamond} from "../libraries/LibDiamond.sol";
 import "../ErcDiamondStorage.sol";
 
 contract ErcDiamondFacet is ErcDiamondStorage{
-    constructor() ErcDiamondStorage(_storagePos) {}
+    constructor() ErcDiamondStorage() {}
     function projectToken() external view returns (address) {
         return getDiamondStorage().MainToken;
     }

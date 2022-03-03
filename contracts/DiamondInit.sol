@@ -8,11 +8,11 @@ pragma solidity ^0.8.0;
 * Implementation of a diamond.
 /******************************************************************************/
 
-import {LibDiamond} from "../libraries/LibDiamond.sol";
-import { IDiamondLoupe } from "../interfaces/IDiamondLoupe.sol";
-import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
-import { IERC20 } from "../interfaces/IERC20.sol";
-import { IERC165 } from "../interfaces/IERC165.sol";
+import {LibDiamond} from "./libraries/LibDiamond.sol";
+import { IDiamondLoupe } from "./interfaces/IDiamondLoupe.sol";
+import { IDiamondCut } from "./interfaces/IDiamondCut.sol";
+import { IERC20 } from "./interfaces/IERC20.sol";
+import { IERC165 } from "./interfaces/IERC165.sol";
 
 contract DiamondInit {    
 
