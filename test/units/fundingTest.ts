@@ -11,9 +11,9 @@ export function likefunding(): void {
     beforeEach(async () => {
 
       this.ctx.signers = await ethers.getSigners();
-      const [owner, addr1, addr2, addr3] = this.ctx.signers;
+      const [owner] = this.ctx.signers;
       
-      const projectName:string = "ERC20Diamond";
+      const projectName:string = "Theia Coin";
       const price:number = 1000;
 
       /// Test Project Coin Deploy
@@ -32,7 +32,8 @@ export function likefunding(): void {
     });
 
     shouldBehaveLikeOwnable();
+
     shouldBehaveLikePausable();
-    
+
   });
 }
