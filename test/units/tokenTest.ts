@@ -14,8 +14,12 @@ export function likeToken(): void{
     let diamondLoupeFacet:Contract;
     let tokenFacet:Contract;
     let addresses:string[] = [];
+
+    let projectName:string = "ERC20Diamond";
+    let price:number = 1000;
+
     before(async function () {
-      diamondAddress = await deployDiamond()
+      diamondAddress = await deployDiamond(projectName, price)
       diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress)
       diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', diamondAddress)
       tokenFacet = await ethers.getContractAt('ERC20Facet', diamondAddress)
