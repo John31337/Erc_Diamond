@@ -18,11 +18,11 @@ export function likefunding(): void {
 
       /// Test Project Coin Deploy
       const ProjectCoinFactory = await ethers.getContractFactory("ProjectCoin", owner);
-      const projectCoin = await ProjectCoinFactory.deploy("Test Project Coin", "TPC", 1000000 * 10 ^ 18);
+      const projectCoin = await ProjectCoinFactory.deploy("Test Main Coin", "TPC", 1000000 * 10 ^ 18);
       await projectCoin.deployed();
       this.ctx.projectCoin = projectCoin;
 
-      /// Deploy Crowdfunding Diamond
+      /// Deploy Erc Diamond
       this.ctx.funding = await await deployDiamond(projectName, price, owner)
 
       // Set Facet Addresses
