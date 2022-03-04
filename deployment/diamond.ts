@@ -26,11 +26,10 @@ export async function deployDiamond (ethers: HardhatEthersHelpers, projectName: 
   console.log('')
   console.log('Deploying facets')
   const FacetNames = [
-        'ERC20Facet',
-        'DiamondLoupeFacet',
-        'ErcDiamondFacet',
-        'OwnershipFacet',
-        'PausableFacet',
+    'ERC20Facet',
+    'DiamondLoupeFacet',
+    'OwnershipFacet',
+    'PausableFacet',
   ]
   
   return diamond.address
