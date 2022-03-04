@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.0;
 
 /******************************************************************************\
 * Author: Nick Mudge
 *
 /******************************************************************************/
 
-import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
+import {AppStorage} from "./LibAppStorage.sol";
 import {IERC20} from "../interfaces/IERC20.sol";
 
 library LibERC20 {
