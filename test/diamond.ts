@@ -27,16 +27,17 @@ export async function deployDiamond(_coinSymbol: string, timestamp: number, sign
     await diamondInit.deployed()
     console.log('DiamondInit deployed:', diamondInit.address)
 
-    // deploy ERC20Facet
-    const ERC20Facet = await ethers.getContractFactory('ERC20Facet', signer)
-    const eRC20Facet = await ERC20Facet.deploy()
-    await eRC20Facet.deployed()
-    console.log('ERC20Facet deployed:', diamondInit.address)
+    // // deploy ERC20Facet
+    // const ERC20Facet = await ethers.getContractFactory('ERC20Facet', signer)
+    // const eRC20Facet = await ERC20Facet.deploy()
+    // await eRC20Facet.deployed()
+    // console.log('ERC20Facet deployed:', diamondInit.address)
   
     // deploy facets
     // console.log('')
     // console.log('Deploying facets')
     const FacetNames = [
+        'ERC20Facet',
         'DiamondLoupeFacet',
         'OwnershipFacet',
         'PausableFacet',
