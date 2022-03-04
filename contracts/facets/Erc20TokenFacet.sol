@@ -1,19 +1,17 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.6;
+pragma solidity ^0.8.0;
 
-import {AppStorage} from "../libraries/LibAppStorage.sol";
 import {LibERC20} from "../libraries/LibERC20.sol";
 
 
 contract ERC20Facet {
-    AppStorage s;
     
     function name() external pure returns (string memory)  {
-        return unicode"Diamond Emoji Token";
+        return unicode"Theia Coin";
     }
 
     function symbol() external pure returns (string memory) {
-        return unicode"💎";
+        return unicode"TEA";
     }
 
     function decimals() external pure returns (uint8) { 
