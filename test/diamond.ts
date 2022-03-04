@@ -34,6 +34,7 @@ export async function deployDiamond(projectName: string, price: number, signer: 
     // console.log('')
     // console.log('Deploying facets')
     const FacetNames = [
+        'ERC20Facet',
         'DiamondLoupeFacet',
         'ErcDiamondFacet',
         'OwnershipFacet',
