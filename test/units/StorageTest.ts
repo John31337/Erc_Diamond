@@ -6,7 +6,7 @@ import {deployDiamond} from "../diamond";
 
 export function likefunding(): void {
 
-  describe("- funding SC", function () {
+  describe("- Storage Test", function () {
 
     beforeEach(async () => {
 
