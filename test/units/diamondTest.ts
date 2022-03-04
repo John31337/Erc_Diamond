@@ -41,7 +41,7 @@ export function likeDiamond(): void{
       for (const address of await diamondLoupeFacet.facetAddresses()) {
         addresses.push(address)
       }
-      assert.equal(addresses.length, 5)
+      assert.equal(addresses.length, 6)
     })
 
     it('2. facets should have the right function selectors -- call to facetFunctionSelectors function', async () => {
