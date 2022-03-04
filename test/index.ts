@@ -1,5 +1,7 @@
 import {likeDiamond} from "./units/diamondTest";
-import {likeToken} from "./units/tokenTest";
+import {likeProject} from "./units/ProjectTest";
+import {likeToken} from "./units/TokenTest";
 
-likeDiamond();
-// likeToken();
+// likeDiamond();
+// likeProject();
+likeToken();

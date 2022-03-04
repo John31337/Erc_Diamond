@@ -23,11 +23,10 @@ export function likeDiamond(): void{
     let addresses:string[] = [];
 
     let projectName:string = "Theia Coin";
-    let timestamp:number = 1000;
 
     before(async function () {
       [owner, addr1, addr2] = await ethers.getSigners();
-      diamondAddress = await deployDiamond(projectName, timestamp, owner)
+      diamondAddress = await deployDiamond(projectName, owner)
       erc20Facet = await ethers.getContractAt('ERC20Facet', diamondAddress)
       diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', diamondAddress)
       ownershipFacet = await ethers.getContractAt('OwnershipFacet', diamondAddress)

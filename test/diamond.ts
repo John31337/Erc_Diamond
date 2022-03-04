@@ -8,7 +8,7 @@ import {
 
 const { getSelectors, FacetCutAction } = require('../deployment/libraries/diamond')
 
-export async function deployDiamond(_coinSymbol: string, timestamp: number, signer: SignerWithAddress) {
+export async function deployDiamond(_coinSymbol: string, signer: SignerWithAddress) {
     const accounts = await ethers.getSigners()
     const contractOwner = accounts[0]
   
@@ -27,15 +27,6 @@ export async function deployDiamond(_coinSymbol: string, timestamp: number, sign
     await diamondInit.deployed()
     console.log('DiamondInit deployed:', diamondInit.address)
 
-    // // deploy ERC20Facet
-    // const ERC20Facet = await ethers.getContractFactory('ERC20Facet', signer)
-    // const eRC20Facet = await ERC20Facet.deploy()
-    // await eRC20Facet.deployed()
-    // console.log('ERC20Facet deployed:', diamondInit.address)
-  
-    // deploy facets
-    // console.log('')
-    // console.log('Deploying facets')
     const FacetNames = [
         'ERC20Facet',
         'DiamondLoupeFacet',

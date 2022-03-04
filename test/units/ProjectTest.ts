@@ -4,9 +4,9 @@ import {shouldBehaveLikeOwnable} from "./behavior/ownableBehaviorTest";
 import {shouldBehaveLikePausable} from "./behavior/pausableBehaviorTest";
 import {deployDiamond} from "../diamond";
 
-export function likeToken(): void {
+export function likeProject(): void {
 
-  describe("- Token Test", function () {
+  describe("- Project Test", function () {
 
     beforeEach(async () => {
 
@@ -14,10 +14,9 @@ export function likeToken(): void {
       const [owner] = this.ctx.signers;
       
       const projectName:string = "Theia Coin";
-      const price:number = 1000;
 
       /// Deploy Erc Diamond
-      this.ctx.funding = await await deployDiamond(projectName, price, owner)
+      this.ctx.funding = await await deployDiamond(projectName, owner)
 
       // Set Facet Addresses
       this.ctx.diamondLoupeFacet = await ethers.getContractAt('DiamondLoupeFacet', this.ctx.funding)

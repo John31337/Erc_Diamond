@@ -9,8 +9,6 @@ contract ERC20Facet is ErcDiamondStorage {
 
     constructor(bytes32 _storagePos) ErcDiamondStorage(_storagePos) {}
 
-    
-
     function name() external pure returns (string memory)  {
         return unicode"Theia Coin";
     }
@@ -39,28 +37,22 @@ contract ERC20Facet is ErcDiamondStorage {
         return true;
     }
 
-    function increaseAllowance(address _spender, uint256 _addedValue) external returns (bool) {
-        LibDiamond.DiamondStorage storage s = getDiamondStorage();
-        unchecked {
-            LibERC20.approve(s, msg.sender, _spender, s.allowances[msg.sender][_spender] + _addedValue);
-        }
-        return true;
-    }      
-
-    function decreaseAllowance(address _spender, uint256 _subtractedValue) external returns (bool) {
-        LibDiamond.DiamondStorage storage s = getDiamondStorage();
-        uint256 currentAllowance = s.allowances[msg.sender][_spender];
-        require(currentAllowance >= _subtractedValue, "Cannot decrease allowance to less than 0");
-        unchecked {
-         LibERC20.approve(s, msg.sender, _spender, currentAllowance - _subtractedValue);   
-        }        
-        return true;        
-    }
-
     function allowance(address _owner, address _spender) external view returns (uint256 remaining_) {
         LibDiamond.DiamondStorage storage s = getDiamondStorage();
         return s.allowances[_owner][_spender];
     }    
+
+    function mint(address _to, uint256 _value) external returns (bool) {
+        LibDiamond.DiamondStorage storage s = getDiamondStorage(); 
+        LibERC20.mint(s, _to, _value);
+        return true;
+    }
+
+    function burn(address _from, uint256 _value) external returns (bool) {
+        LibDiamond.DiamondStorage storage s = getDiamondStorage(); 
+        LibERC20.burn(s, _from, _value);
+        return true;
+    }
 
     function transfer(address _to, uint256 _value) external returns (bool) {       
         LibDiamond.DiamondStorage storage s = getDiamondStorage(); 
