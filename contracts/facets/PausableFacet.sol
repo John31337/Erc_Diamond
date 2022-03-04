@@ -16,7 +16,7 @@ contract PausableFacet is ErcDiamondStorage {
      */
     event Unpaused(address account);
 
-    constructor() ErcDiamondStorage() {}
+    constructor(bytes32 _storagePos) ErcDiamondStorage(_storagePos) {}
     
     function paused() external view returns (bool paused_) {
         LibDiamond.DiamondStorage storage ds = getDiamondStorage();
@@ -25,8 +25,8 @@ contract PausableFacet is ErcDiamondStorage {
 
     /// @notice Pause contract
     function pause() external {
-        LibDiamond.enforceIsContractOwner();
-        LibDiamond.whenNotPaused();
+        LibDiamond.enforceIsContractOwner(_storagePos);
+        LibDiamond.whenNotPaused(_storagePos);
 
         LibDiamond.DiamondStorage storage ds = getDiamondStorage();
         ds._paused = true;
@@ -35,8 +35,8 @@ contract PausableFacet is ErcDiamondStorage {
 
     /// @notice Unpause contract
     function unpause() external {
-        LibDiamond.enforceIsContractOwner();
-        LibDiamond.whenPaused();
+        LibDiamond.enforceIsContractOwner(_storagePos);
+        LibDiamond.whenPaused(_storagePos);
 
         LibDiamond.DiamondStorage storage ds = getDiamondStorage();
         ds._paused = false;

@@ -6,13 +6,10 @@ pragma solidity ^0.8.0;
 * EIP-2535 Diamonds: https://eips.ethereum.org/EIPS/eip-2535
 /******************************************************************************/
 import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
-import { MainToken } from "../MainToken.sol";
 import { Strings } from "./Strings.sol";
 
 library LibDiamond {
     using Strings for string;
-    bytes32 constant DIAMOND_STORAGE_POSITION = keccak256("diamond.standard.diamond.storage");
-
     struct FacetAddressAndPosition {
         address facetAddress;
         uint96 functionSelectorPosition; // position in facetFunctionSelectors.functionSelectors array
@@ -38,18 +35,21 @@ library LibDiamond {
         string _projectName;
         // paused of the contract
         bool _paused;
-        // GMT timestamp of when the crowdfund starts
-        uint256 startTimestamp;
         // owner of the contract
         address contractOwner;
-        // Erc20Token contract
-        address MainToken;
-        // Price of Token
-        uint256 Price;
+        // totalSupply
+        uint256 totalSupply;
+        // Erc20Token symbols
+        mapping(address => string) symbols;
+        // Erc20Token symbols
+        mapping(address => uint256) balances;
+        // GMT timestamp of when the crowdfund starts
+        mapping(address => uint256) startTimestamps;
+        // Erc20Token allowances
+        mapping(address => mapping(address => uint256)) allowances;
     }
 
-    function diamondStorage() internal pure returns (DiamondStorage storage ds) {
-        bytes32 position = DIAMOND_STORAGE_POSITION;
+    function diamondStorage(bytes32 position) internal pure returns (DiamondStorage storage ds) {
         assembly {
             ds.slot := position
         }
@@ -57,35 +57,36 @@ library LibDiamond {
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    function setContractOwner(address _newOwner) internal {
-        DiamondStorage storage ds = diamondStorage();
+    function setContractOwner(bytes32 storagePos, address _newOwner) internal {
+        DiamondStorage storage ds = diamondStorage(storagePos);
         address previousOwner = ds.contractOwner;
         ds.contractOwner = _newOwner;
         emit OwnershipTransferred(previousOwner, _newOwner);
     }
 
-    function contractOwner() internal view returns (address contractOwner_) {
-        contractOwner_ = diamondStorage().contractOwner;
+    function contractOwner(bytes32 storagePos) internal view returns (address contractOwner_) {
+        contractOwner_ = diamondStorage(storagePos).contractOwner;
     }
 
-    function enforceIsContractOwner() internal view {
-        require(msg.sender == diamondStorage().contractOwner, "LibDiamond: Must be contract owner");
+    function enforceIsContractOwner(bytes32 storagePos) internal view {
+        require(msg.sender == diamondStorage(storagePos).contractOwner, "LibDiamond: Must be contract owner");
     }
 
     // The contract must be paused.
-    function whenPaused() internal view {
-        require(diamondStorage()._paused, "Pausable: not paused");
+    function whenPaused(bytes32 storagePos) internal view {
+        require(diamondStorage(storagePos)._paused, "Pausable: not paused");
     }
 
     // The contract must not be paused.
-    function whenNotPaused() internal view {
-        require(!diamondStorage()._paused, "Pausable: paused");
+    function whenNotPaused(bytes32 storagePos) internal view {
+        require(!diamondStorage(storagePos)._paused, "Pausable: paused");
     }
 
     event DiamondCut(IDiamondCut.FacetCut[] _diamondCut, address _init, bytes _calldata);
 
     // Internal function version of diamondCut
     function diamondCut(
+        bytes32 storagePos,
         IDiamondCut.FacetCut[] memory _diamondCut,
         address _init,
         bytes memory _calldata
@@ -93,11 +94,11 @@ library LibDiamond {
         for (uint256 facetIndex; facetIndex < _diamondCut.length; facetIndex++) {
             IDiamondCut.FacetCutAction action = _diamondCut[facetIndex].action;
             if (action == IDiamondCut.FacetCutAction.Add) {
-                addFunctions(_diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
+                addFunctions(storagePos, _diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
             } else if (action == IDiamondCut.FacetCutAction.Replace) {
-                replaceFunctions(_diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
+                replaceFunctions(storagePos, _diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
             } else if (action == IDiamondCut.FacetCutAction.Remove) {
-                removeFunctions(_diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
+                removeFunctions(storagePos, _diamondCut[facetIndex].facetAddress, _diamondCut[facetIndex].functionSelectors);
             } else {
                 revert("LibDiamondCut: Incorrect FacetCutAction");
             }
@@ -106,9 +107,9 @@ library LibDiamond {
         initializeDiamondCut(_init, _calldata);
     }
 
-    function addFunctions(address _facetAddress, bytes4[] memory _functionSelectors) internal {
+    function addFunctions(bytes32 storagePos, address _facetAddress, bytes4[] memory _functionSelectors) internal {
         require(_functionSelectors.length > 0, "LibDiamondCut: No selectors in facet to cut");
-        DiamondStorage storage ds = diamondStorage();        
+        DiamondStorage storage ds = diamondStorage(storagePos);        
         require(_facetAddress != address(0), "LibDiamondCut: Add facet can't be address(0)");
         uint96 selectorPosition = uint96(ds.facetFunctionSelectors[_facetAddress].functionSelectors.length);
         // add new facet address if it does not exist
@@ -124,9 +125,9 @@ library LibDiamond {
         }
     }
 
-    function replaceFunctions(address _facetAddress, bytes4[] memory _functionSelectors) internal {
+    function replaceFunctions(bytes32 storagePos, address _facetAddress, bytes4[] memory _functionSelectors) internal {
         require(_functionSelectors.length > 0, "LibDiamondCut: No selectors in facet to cut");
-        DiamondStorage storage ds = diamondStorage();
+        DiamondStorage storage ds = diamondStorage(storagePos);
         require(_facetAddress != address(0), "LibDiamondCut: Add facet can't be address(0)");
         uint96 selectorPosition = uint96(ds.facetFunctionSelectors[_facetAddress].functionSelectors.length);
         // add new facet address if it does not exist
@@ -143,9 +144,9 @@ library LibDiamond {
         }
     }
 
-    function removeFunctions(address _facetAddress, bytes4[] memory _functionSelectors) internal {
+    function removeFunctions(bytes32 storagePos, address _facetAddress, bytes4[] memory _functionSelectors) internal {
         require(_functionSelectors.length > 0, "LibDiamondCut: No selectors in facet to cut");
-        DiamondStorage storage ds = diamondStorage();
+        DiamondStorage storage ds = diamondStorage(storagePos);
         // if function does not exist then do nothing and return
         require(_facetAddress == address(0), "LibDiamondCut: Remove facet address must be address(0)");
         for (uint256 selectorIndex; selectorIndex < _functionSelectors.length; selectorIndex++) {
@@ -226,19 +227,5 @@ library LibDiamond {
             contractSize := extcodesize(_contract)
         }
         require(contractSize > 0, _errorMessage);
-    }
-
-    function setMainToken(string memory _prjName, uint256 _price, uint256 _stTimestamp) internal{
-        require(_prjName.length() > 2, "Erc Diamond: NAME_MIN_3");
-        require(_price > 0, "Erc Diamond: PRICE_NO_ZERO");
-        require(_stTimestamp > 0, "Erc Diamond: START>0");
-        DiamondStorage storage ds = diamondStorage();  
-        
-        ds._projectName = _prjName;
-        ds.Price = _price;
-        ds.startTimestamp = _stTimestamp;
-
-        string memory tokenSymbol = string("T").append(ds._projectName);
-        ds.MainToken = address(new MainToken(ds._projectName, tokenSymbol));
     }
 }

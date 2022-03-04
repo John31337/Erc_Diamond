@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import {LibERC20} from "../libraries/LibERC20.sol";
-
+import {LibDiamond} from "../libraries/LibDiamond.sol";
 
 contract ERC20Facet {
-    
+    LibDiamond.DiamondStorage s;
     function name() external pure returns (string memory)  {
         return unicode"Theia Coin";
     }

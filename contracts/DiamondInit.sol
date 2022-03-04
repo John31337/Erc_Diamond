@@ -13,12 +13,14 @@ import { IDiamondLoupe } from "./interfaces/IDiamondLoupe.sol";
 import { IDiamondCut } from "./interfaces/IDiamondCut.sol";
 import { IERC20 } from "./interfaces/IERC20.sol";
 import { IERC165 } from "./interfaces/IERC165.sol";
+import "./ErcDiamondStorage.sol";
 
-contract DiamondInit {    
+contract DiamondInit is ErcDiamondStorage{
 
+    constructor(bytes32 _storagePos) ErcDiamondStorage(_storagePos) {}
     function init() external {
         // adding ERC165 data
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        LibDiamond.DiamondStorage storage ds = getDiamondStorage();
         ds.supportedInterfaces[type(IERC165).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
